@@ -10,6 +10,7 @@
     "inngest": "npx inngest-cli@latest dev"
   },
   "dependencies": {
+    "@e2b/code-interpreter": "^2.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@inngest/agent-kit": "^0.13.0",
     "@prisma/client": "^6.16.3",
@@ -48,6 +49,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
     "inngest": "^3.44.2",
     "input-otp": "^1.4.2",
