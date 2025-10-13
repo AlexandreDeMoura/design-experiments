@@ -18,7 +18,7 @@ export const helloWorld =
             name: "Code Agent",
             description: "A code agent that can write code in a sandboxed environment",
             system: PROMPT,
-            model: openai({ model: "gpt-4o", defaultParameters: { temperature: 0.2 } }),
+            model: openai({ model: "gpt-4.1", defaultParameters: { temperature: 0.2 } }),
             tools: [
               createTool({
                 name: "terminal",
@@ -61,22 +61,18 @@ export const helloWorld =
                 }),
                 handler: async ({ files }, { step, network }) => {
                   return await step?.run("createOrUpdateFiles", async () => {
-                    const newFiles = await step?.run("createOrUpdateFiles", async () => {
-                      try {
-                        const updatedFiles =  network.state.data.files || {};
-                        const sandbox = await getSandbox(sandboxId);
-                        for (const file of files) {
-                          await sandbox.files.write(file.path, file.content);
-                          updatedFiles[file.path] = file.content;
-                        }
-                        return updatedFiles;
-                      } catch (error) {
-                        console.error(`Failed to create or update file: ${error}`);
-                        return network.state.data.files || {};
+                    try {
+                      const updatedFiles = network.state.data.files || {};
+                      const sandbox = await getSandbox(sandboxId);
+                      for (const file of files) {
+                        await sandbox.files.write(file.path, file.content);
+                        updatedFiles[file.path] = file.content;
                       }
-                    });
-                    if (typeof newFiles === "object") {
-                      network.state.data.files = newFiles;
+                      network.state.data.files = updatedFiles;
+                      return updatedFiles;
+                    } catch (error) {
+                      console.error(`Failed to create or update file: ${error}`);
+                      return network.state.data.files || {};
                     }
                   });
                 },
